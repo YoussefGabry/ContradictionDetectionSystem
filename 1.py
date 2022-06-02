@@ -11,6 +11,80 @@ from collections import defaultdict
 
 from pprint import pprint
 
+jsonobj = {"$id":"1","projectID":4,"projectTitle":"Spotify Music Player",
+"projectDescription":"It's a music player.....","domain":"Music Players",
+"organizationName":"Spotify","systemActors":"End-User",
+"meetings":{"$id":"2","$values":[
+{
+"$id":"3","meetingID":1,"meetingTitle":"Third Meeting","meetingDescription":"In this meeting we talked about.....",
+"meetingPersonnel":"Hamdy Elsayed, Youssef Ahmed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
+"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+"project":{"$ref":"1"},
+"services":{"$id":"4","$values":[]},"userStories":None
+}
+,{
+"$id":"5","meetingID":2,"meetingTitle":"Second Meeting","meetingDescription":"In this meeting we talked about.....",
+"meetingPersonnel":"Ahmed Elmohamady, Mohamed Sayed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
+"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+"project":{"$ref":"1"},
+"services":{"$id":"6","$values":[
+{
+"$id":"9","serviceID":1,"serviceTitle":"Login Page",
+"serviceDetails":{"$id":"10","$values":[
+{
+"$id":"11","serviceDetailID":1,"serviceDetailString":"The User can't use his email to login","timestamp":"10:32","service":{"$ref":"9"}
+},
+{
+"$id":"12","serviceDetailID":2,"serviceDetailString":"It should provide two text.....","timestamp":"5:21","service":{"$ref":"9"}
+},
+{
+"$id":"13","serviceDetailID":3,"serviceDetailString":"login page should be the.....","timestamp":"1:30","service":{"$ref":"9"}
+}
+]
+},
+"serviceVerified":False,"conflictServiceID":0,"meeting":{"$ref":"7"}}
+]
+},
+"userStories":None
+},{
+"$id":"7","meetingID":3,"meetingTitle":"First Meeting","meetingDescription":"In this meeting we talked about.....",
+"meetingPersonnel":"Ahmed Elsayed, Mohamed Ahmed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
+"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+"project":{"$ref":"1"},
+"services":{"$id":"8","$values":[
+{
+"$id":"9","serviceID":1,"serviceTitle":"Login Page",
+"serviceDetails":{"$id":"10","$values":[
+{
+"$id":"11","serviceDetailID":1,"serviceDetailString":"The User can login with his email and username","timestamp":"10:32","service":{"$ref":"9"}
+},
+{
+"$id":"12","serviceDetailID":2,"serviceDetailString":"It should provide two text.....","timestamp":"5:21","service":{"$ref":"9"}
+},
+{
+"$id":"13","serviceDetailID":3,"serviceDetailString":"login page should be the.....","timestamp":"1:30","service":{"$ref":"9"}
+}
+]
+},
+"serviceVerified":False,"conflictServiceID":0,"meeting":{"$ref":"7"}}
+]
+},
+"userStories":None
+}
+]},"user":None}
+
+meetings=jsonobj["meetings"]
+x=len(meetings)
+last_meeting_srvcs=meetings['$values'][x]['services']['$values']
+all_srvcs=[]
+for i in range(x):
+    all_srvcs.append(meetings['$values'][i]['services']['$values'])
+
+conflicts_srvs=[]
+srvc_title=last_meeting_srvcs[0]['serviceTitle']
+
+
+
 _do_print_debug_info = False
 
 def _print_table(rows):
@@ -182,11 +256,12 @@ def antysyn(word):
 #sent1=input("Input the first sentence:")
 #sent2=input("Input the second sentence:")
 nlp = en_core_web_sm.load()
-sent1="I slept till noon."
-sent2="I woke up early in the morning."
+sent1="The user can login with username and password."
+sent2="The user account must be verified."
 print_parse_info(nlp,sent1)
 print("\n")
 print_parse_info(nlp,sent2)
+
 doc1 = nlp(sent1)
 doc2 = nlp(sent2)
 
