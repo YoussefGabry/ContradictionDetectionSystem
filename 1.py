@@ -1,3 +1,4 @@
+from importlib_metadata import Pair
 import spacy
 from nltk.corpus import wordnet
 #nlp = spacy.load('en')
@@ -11,78 +12,169 @@ from collections import defaultdict
 
 from pprint import pprint
 
-jsonobj = {"$id":"1","projectID":4,"projectTitle":"Spotify Music Player",
-"projectDescription":"It's a music player.....","domain":"Music Players",
-"organizationName":"Spotify","systemActors":"End-User",
-"meetings":{"$id":"2","$values":[
-{
-"$id":"3","meetingID":1,"meetingTitle":"Third Meeting","meetingDescription":"In this meeting we talked about.....",
-"meetingPersonnel":"Hamdy Elsayed, Youssef Ahmed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
-"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-"project":{"$ref":"1"},
-"services":{"$id":"4","$values":[]},"userStories":None
-}
-,{
-"$id":"5","meetingID":2,"meetingTitle":"Second Meeting","meetingDescription":"In this meeting we talked about.....",
-"meetingPersonnel":"Ahmed Elmohamady, Mohamed Sayed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
-"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-"project":{"$ref":"1"},
-"services":{"$id":"6","$values":[
-{
-"$id":"9","serviceID":1,"serviceTitle":"Login Page",
-"serviceDetails":{"$id":"10","$values":[
-{
-"$id":"11","serviceDetailID":1,"serviceDetailString":"The User can't use his email to login","timestamp":"10:32","service":{"$ref":"9"}
-},
-{
-"$id":"12","serviceDetailID":2,"serviceDetailString":"It should provide two text.....","timestamp":"5:21","service":{"$ref":"9"}
-},
-{
-"$id":"13","serviceDetailID":3,"serviceDetailString":"login page should be the.....","timestamp":"1:30","service":{"$ref":"9"}
-}
-]
-},
-"serviceVerified":False,"conflictServiceID":0,"meeting":{"$ref":"7"}}
-]
-},
-"userStories":None
-},{
-"$id":"7","meetingID":3,"meetingTitle":"First Meeting","meetingDescription":"In this meeting we talked about.....",
-"meetingPersonnel":"Ahmed Elsayed, Mohamed Ahmed","audioReference":"ASRModule/audio_wac/batoul_meeting.wav",
-"asR_Text":"Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-"project":{"$ref":"1"},
-"services":{"$id":"8","$values":[
-{
-"$id":"9","serviceID":1,"serviceTitle":"Login Page",
-"serviceDetails":{"$id":"10","$values":[
-{
-"$id":"11","serviceDetailID":1,"serviceDetailString":"The User can login with his email and username","timestamp":"10:32","service":{"$ref":"9"}
-},
-{
-"$id":"12","serviceDetailID":2,"serviceDetailString":"It should provide two text.....","timestamp":"5:21","service":{"$ref":"9"}
-},
-{
-"$id":"13","serviceDetailID":3,"serviceDetailString":"login page should be the.....","timestamp":"1:30","service":{"$ref":"9"}
-}
-]
-},
-"serviceVerified":False,"conflictServiceID":0,"meeting":{"$ref":"7"}}
-]
-},
-"userStories":None
-}
-]},"user":None}
 
-meetings=jsonobj["meetings"]
-x=len(meetings)
-last_meeting_srvcs=meetings['$values'][x]['services']['$values']
+jsonobj={
+    "$id": "1",
+    "item1": 3,
+    "item2": {
+        "$id": "2",
+        "projectID": 4,
+        "projectTitle": "Spotify Music Player",
+        "projectDescription": "It's a music player.....",
+        "domain": "Music Players",
+        "organizationName": "Spotify",
+        "systemActors": "End-User",
+        "meetings": {
+            "$id": "3",
+            "$values": [
+                {
+                    "$id": "4",
+                    "meetingID": 3,
+                    "meetingTitle": "First Meeting",
+                    "meetingDescription": "In this meeting we talked about.....",
+                    "meetingPersonnel": "Ahmed Elsayed, Mohamed Ahmed",
+                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
+                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+                    "project": {
+                        "$ref": "2"
+                    },
+                    "services": {
+                        "$id": "5",
+                        "$values": [
+                            {
+                                "$id": "6",
+                                "serviceID": 1,
+                                "serviceTitle": "Login Page",
+                                "serviceDetails": {
+                                    "$id": "7",
+                                    "$values": [
+                                        {
+                                            "$id": "8",
+                                            "serviceDetailID": 1,
+                                            "serviceDetailString": "User should put a password",
+                                            "timestamp": "10:32",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        },
+                                        {
+                                            "$id": "9",
+                                            "serviceDetailID": 2,
+                                            "serviceDetailString": "User can login with his phone number",
+                                            "timestamp": "5:21",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        },
+                                        {
+                                            "$id": "10",
+                                            "serviceDetailID": 3,
+                                            "serviceDetailString": "User should use two-factor authentication",
+                                            "timestamp": "1:30",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "serviceVerified": False,
+                                "conflictServiceID": 0,
+                                "meeting": {
+                                    "$ref": "4"
+                                }
+                            }
+                        ]
+                    },
+                    "userStories": None
+                },
+                {
+                    "$id": "11",
+                    "meetingID": 1,
+                    "meetingTitle": "Third Meeting",
+                    "meetingDescription": "In this meeting we talked about.....",
+                    "meetingPersonnel": "Hamdy Elsayed, Youssef Ahmed",
+                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
+                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+                    "project": {
+                        "$ref": "2"
+                    },
+                    "services": {
+                        "$id": "5",
+                        "$values": [
+                            {
+                                "$id": "6",
+                                "serviceID": 1,
+                                "serviceTitle": "Login Page",
+                                "serviceDetails": {
+                                    "$id": "7",
+                                    "$values": [
+                                        {
+                                            "$id": "8",
+                                            "serviceDetailID": 1,
+                                            "serviceDetailString": "User should login with username and password",
+                                            "timestamp": "10:32",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        },
+                                        {
+                                            "$id": "9",
+                                            "serviceDetailID": 2,
+                                            "serviceDetailString": "User should have a unique username",
+                                            "timestamp": "5:21",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        },
+                                        {
+                                            "$id": "10",
+                                            "serviceDetailID": 3,
+                                            "serviceDetailString": "User shouldn't put an easy password",
+                                            "timestamp": "1:30",
+                                            "service": {
+                                                "$ref": "6"
+                                            }
+                                        }
+                                    ]
+                                },
+                                "serviceVerified": False,
+                                "conflictServiceID": 0,
+                                "meeting": {
+                                    "$ref": "4"
+                                }
+                            }
+                        ]
+                    },
+                    "userStories": None
+                },
+                {
+                    "$id": "13",
+                    "meetingID": 2,
+                    "meetingTitle": "Second Meeting",
+                    "meetingDescription": "In this meeting we talked about.....",
+                    "meetingPersonnel": "Ahmed Elmohamady, Mohamed Sayed",
+                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
+                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
+                    "project": {
+                        "$ref": "2"
+                    },
+                    "services": {
+                        "$id": "14",
+                        "$values": []
+                    },
+                    "userStories": None
+                }
+            ]
+        },
+        "user": None
+    }
+}
+
+
+id=jsonobj["item1"]
+meetings=jsonobj["item2"]["meetings"]
 all_srvcs=[]
-for i in range(x):
-    all_srvcs.append(meetings['$values'][i]['services']['$values'])
-
-conflicts_srvs=[]
-srvc_title=last_meeting_srvcs[0]['serviceTitle']
-
+last_meeting_srvcs=[]
 
 
 _do_print_debug_info = False
@@ -237,9 +329,9 @@ def print_parse_info(nlp, sent):
     _print_table(rows)
     
 #Antonyms finder function
-synonyms = []
-antonyms = []
 #word="went"
+antonyms = []
+synonyms = []
 def antysyn(word):
     from nltk.corpus import wordnet
     for syn in wordnet.synsets(word):
@@ -250,79 +342,34 @@ def antysyn(word):
             if l.antonyms():
                 antonyms.append(l.antonyms()[0].name())
     #print("Synonym:",set(synonyms))
-    print("Antonym:",set(antonyms))
+    #print("Antonym:",set(antonyms))
     
 #Taking the sentences as input
-#sent1=input("Input the first sentence:")
-#sent2=input("Input the second sentence:")
+
 nlp = en_core_web_sm.load()
-sent1="The user can login with username and password."
-sent2="The user account must be verified."
-print_parse_info(nlp,sent1)
-print("\n")
-print_parse_info(nlp,sent2)
+sent1="The user can't login with username and password."
+sent2="The user account can be verified."
 
-doc1 = nlp(sent1)
-doc2 = nlp(sent2)
-
-#Initializing required variables and lists.
-wrdlist=list()
-antony=list()
-contr_tracker=0
-antonym_tracker=0
-
-negdoc1=0
-negdoc2=0
-verb1=""
-verb2=""
-num_contr_tracker=0
-
-#Processing sentence 1
-for token in doc1:
-    if(token.dep_=="neg"):
-        negdoc1=1
-        verb1+="NOT "
-    #Storing the antonyms of root words
-    if(token.pos_=="VERB" and token.dep_=="ROOT"):
-        print(token.text)
-        verb1+=token.lemma_
-        antysyn(token.lemma_)
-        for anton in antonyms:
-            antony.append(anton)
-
-#Processing Sentence 2
-for token in doc2:
-    if(token.dep_=="neg"):
-        negdoc2=1
-        verb2+="NOT "
-    if(token.pos_=="VERB" and token.dep_=="ROOT"):
-        verb2+=token.lemma_
-        if(token.lemma_ in antony):
-            antonym_tracker=1
-
-#Function for checking negation
+#print_parse_info(nlp,sent1)
+#print("\n")
+#print_parse_info(nlp,sent2)
+checklist_more=['more than ', 'greater than ', 'above']
+checklist_less=['less than ', 'lesser than ', 'below']
 def checknegationcontradiction(antonym_tracker,negdoc1,negdoc2):
     temp_var=negdoc1+negdoc2+antonym_tracker
     if(temp_var%2!=0 and temp_var<3):
         return 1
     else:
         return 0
-    
-#Checking contradiction due to negation
-contr_tracker=checknegationcontradiction(antonym_tracker,negdoc1,negdoc2)
-
-#Finding numerical mismatch
-checklist_more=['more than ', 'greater than ', 'above']
-checklist_less=['less than ', 'lesser than ', 'below']
 
 def check_words(doc):
     merged_word=""
     #tokens = word_tokenize(doc)
     WordNum  = len(doc)
-    print("WordNum is:"+str(WordNum))
+    #print("WordNum is:"+str(WordNum))
     for i in range(WordNum):
-        print(i,doc[i],doc[i].ent_type_)
-        print(str.isdigit(doc[i].text))
+        #print(i,doc[i],doc[i].ent_type_)
+        #print(str.isdigit(doc[i].text))
         if(doc[i].ent_type_=="CARDINAL" or doc[i].pos_=="NUM"):
              merged_word = doc[i].text
         if((doc[i].ent_type_=="CARDINAL" or doc[i].pos_=="NUM") and str.isdigit(doc[i].text)):
@@ -338,7 +385,7 @@ def check_values(t1,t2):
             num2 = [int(s) for s in str.split(t2) if s.isdigit()]
             num2=num2[0]
             if int(num1)>num2:
-                print("case1")
+                #print("case1")
                 return('Contradiction')
             else:
                 return("No Contradiction")
@@ -350,7 +397,7 @@ def check_values(t1,t2):
             num1 = [int(s) for s in str.split(t2) if s.isdigit()]
             num1=num1[0]
             if int(num2)>num1:
-                print("case2")
+                #print("case2")
                 return('Contradiction') 
             else:
                 return("No Contradiction")
@@ -362,7 +409,7 @@ def check_values(t1,t2):
             num2 = [int(s) for s in str.split(t2) if s.isdigit()]
             num2=num2[0]
             if int(num1)<num2:
-                print("case3")
+                #print("case3")
                 return('Contradiction')
             else:
                 return("No Contradiction")
@@ -374,7 +421,7 @@ def check_values(t1,t2):
             num1 = [int(s) for s in str.split(t2) if s.isdigit()]
             num1=num1[0]
             if int(num1)>num2:
-                print("case4")
+                #print("case4")
                 return('Contradiction')
             else: 
                 return("No Contradiction")
@@ -384,26 +431,113 @@ def check_values(t1,t2):
         if(t1!=t2):
             return('Contradiction')
             
+def proc_sentences(s1,s2):
+    doc1 = nlp(sent1)
+    doc2 = nlp(sent2)
 
-x1 = check_words(doc1)
-print(x1)
+    #Initializing required variables and lists.
+    wrdlist=list()
+    antony=list()
+    contr_tracker=0
+    antonym_tracker=0
 
-y1 = check_words(doc2)
-print("Second Sentence:",y1)
-
-number_contr_tracker=check_values(x1,y1)
-if(number_contr_tracker=='Contradiction'):
-    num_contr_tracker=1
-else:
+    negdoc1=0
+    negdoc2=0
+    verb1=""
+    verb2=""
     num_contr_tracker=0
 
-if contr_tracker==1:
-    print("\n","->",verb1.upper(),"and",verb2.upper(),"can't happen simultaneously.")
-    print("->Antonymity/Negation contradiction FOUND.")
-else:
-    print("\n->Antonymity/Negation contradiction NOT found.")
+    for token in doc1:
+        if(token.dep_=="neg"):
+            negdoc1=1
+            verb1+="NOT "
+        if(token.pos_=="VERB" and token.dep_=="ROOT"):
+            #print(token.text)
+            verb1+=token.lemma_
+            antysyn(token.lemma_)
+            for anton in antonyms:
+                antony.append(anton)
+    for token in doc2:
+        if(token.dep_=="neg"):
+            negdoc2=1
+            verb2+="NOT "
+        if(token.pos_=="VERB" and token.dep_=="ROOT"):
+            verb2+=token.lemma_
+        if(token.lemma_ in antony):
+            antonym_tracker=1
+        
+    #Checking contradiction due to negation
+    contr_tracker=checknegationcontradiction(antonym_tracker,negdoc1,negdoc2)
 
-if num_contr_tracker==1:
-    print("->Numeric Mismatch Contradiction FOUND.")
-else:
-    print("->Numeric Mismatch Contradiction NOT Found.")
+    #Finding numerical mismatch
+    x1 = check_words(doc1)
+    #print(x1)
+
+    y1 = check_words(doc2)
+    #print("Second Sentence:",y1)
+
+    number_contr_tracker=check_values(x1,y1)
+    if(number_contr_tracker=='Contradiction'):
+        num_contr_tracker=1
+    else:
+        num_contr_tracker=0
+
+    if contr_tracker==1:
+        print("\n","->",verb1.upper(),"and",verb2.upper(),"can't happen simultaneously.")
+        print("->Antonymity/Negation contradiction FOUND.")
+        return True
+    else:
+        print("\n->Antonymity/Negation contradiction NOT found.")
+        return False
+    #if num_contr_tracker==1:
+    #   print("->Numeric Mismatch Contradiction FOUND.")
+    #else:
+    #    print("->Numeric Mismatch Contradiction NOT Found.")
+
+
+for i in range(len(meetings)):
+    if meetings['$values'][i]['meetingID'] == id:
+        last_meeting_srvcs=meetings['$values'][i]['services']['$values']
+    else:
+        all_srvcs.append(meetings['$values'][i]['services']['$values'])
+#print(all_srvcs)
+conflicts_srvs=[]
+
+conflictDetected=False
+
+for i in range(len(last_meeting_srvcs)):
+    lst=last_meeting_srvcs[i]['serviceTitle']
+    #print(lst)
+    for j in range(len(all_srvcs)):
+        ast=all_srvcs[0][j]['serviceTitle']
+        #print(ast)
+        #ast_sd=all_srvcs['$values'][j]['serviceDetails']['$values']
+        #print(last_meeting_srvcs)
+        if lst == ast:
+            lst_sd=last_meeting_srvcs[i]['serviceDetails']['$values']
+            ast_sd=all_srvcs[0][j]['serviceDetails']['$values']
+            conflictDetected=False
+            for x in range(len(lst_sd)):
+                if conflictDetected:
+                    break
+                for y in range(len(ast_sd)):
+                    sen1=lst_sd[x]['serviceDetailString']
+                    sen2=ast_sd[y]['serviceDetailString']
+                    #print(sen1,'\n',sen2)
+                    if proc_sentences(sen1,sen2):
+                        print(sent1,'\n',sent2)
+                        last_meeting_srvcs[i]['conflictServiceID']=all_srvcs[0][j]['serviceID']
+                        all_srvcs[0][j]['conflictServiceID']=last_meeting_srvcs[i]['serviceID']
+                        srvc1MeetingID = last_meeting_srvcs[i]['meeting']['$ref']
+                        srvc2MeetingID = all_srvcs[0][j]['meeting']['$ref']
+                        print(srvc1MeetingID)
+                        print(srvc2MeetingID)
+
+                        print("conflict")
+                        conflicts_srvs.append(Pair(all_srvcs[0][j]['serviceID'],last_meeting_srvcs[j]['serviceID']))
+                        conflictDetected=True
+                        #print(last_meeting_srvcs[i])
+                        break
+
+
+
