@@ -12,169 +12,14 @@ from collections import defaultdict
 
 from pprint import pprint
 
+from flask import Flask
+from flask import request
 
-jsonobj={
-    "$id": "1",
-    "item1": 3,
-    "item2": {
-        "$id": "2",
-        "projectID": 4,
-        "projectTitle": "Spotify Music Player",
-        "projectDescription": "It's a music player.....",
-        "domain": "Music Players",
-        "organizationName": "Spotify",
-        "systemActors": "End-User",
-        "meetings": {
-            "$id": "3",
-            "$values": [
-                {
-                    "$id": "4",
-                    "meetingID": 3,
-                    "meetingTitle": "First Meeting",
-                    "meetingDescription": "In this meeting we talked about.....",
-                    "meetingPersonnel": "Ahmed Elsayed, Mohamed Ahmed",
-                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
-                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-                    "project": {
-                        "$ref": "2"
-                    },
-                    "services": {
-                        "$id": "5",
-                        "$values": [
-                            {
-                                "$id": "6",
-                                "serviceID": 1,
-                                "serviceTitle": "Login Page",
-                                "serviceDetails": {
-                                    "$id": "7",
-                                    "$values": [
-                                        {
-                                            "$id": "8",
-                                            "serviceDetailID": 1,
-                                            "serviceDetailString": "User should put a password",
-                                            "timestamp": "10:32",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        },
-                                        {
-                                            "$id": "9",
-                                            "serviceDetailID": 2,
-                                            "serviceDetailString": "User can login with his phone number",
-                                            "timestamp": "5:21",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        },
-                                        {
-                                            "$id": "10",
-                                            "serviceDetailID": 3,
-                                            "serviceDetailString": "User should use two-factor authentication",
-                                            "timestamp": "1:30",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        }
-                                    ]
-                                },
-                                "serviceVerified": False,
-                                "conflictServiceID": 0,
-                                "meeting": {
-                                    "$ref": "4"
-                                }
-                            }
-                        ]
-                    },
-                    "userStories": None
-                },
-                {
-                    "$id": "11",
-                    "meetingID": 1,
-                    "meetingTitle": "Third Meeting",
-                    "meetingDescription": "In this meeting we talked about.....",
-                    "meetingPersonnel": "Hamdy Elsayed, Youssef Ahmed",
-                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
-                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-                    "project": {
-                        "$ref": "2"
-                    },
-                    "services": {
-                        "$id": "5",
-                        "$values": [
-                            {
-                                "$id": "6",
-                                "serviceID": 1,
-                                "serviceTitle": "Login Page",
-                                "serviceDetails": {
-                                    "$id": "7",
-                                    "$values": [
-                                        {
-                                            "$id": "8",
-                                            "serviceDetailID": 1,
-                                            "serviceDetailString": "User should login with username and password",
-                                            "timestamp": "10:32",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        },
-                                        {
-                                            "$id": "9",
-                                            "serviceDetailID": 2,
-                                            "serviceDetailString": "User should have a unique username",
-                                            "timestamp": "5:21",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        },
-                                        {
-                                            "$id": "10",
-                                            "serviceDetailID": 3,
-                                            "serviceDetailString": "User shouldn't put an easy password",
-                                            "timestamp": "1:30",
-                                            "service": {
-                                                "$ref": "6"
-                                            }
-                                        }
-                                    ]
-                                },
-                                "serviceVerified": False,
-                                "conflictServiceID": 0,
-                                "meeting": {
-                                    "$ref": "4"
-                                }
-                            }
-                        ]
-                    },
-                    "userStories": None
-                },
-                {
-                    "$id": "13",
-                    "meetingID": 2,
-                    "meetingTitle": "Second Meeting",
-                    "meetingDescription": "In this meeting we talked about.....",
-                    "meetingPersonnel": "Ahmed Elmohamady, Mohamed Sayed",
-                    "audioReference": "ASRModule/audio_wav/batoul_meeting.wav",
-                    "asR_Text": "Speaker A: Good afternoon, it's a pleasure to meet with you today sirSpeaker B: the pleasure is mine",
-                    "project": {
-                        "$ref": "2"
-                    },
-                    "services": {
-                        "$id": "14",
-                        "$values": []
-                    },
-                    "userStories": None
-                }
-            ]
-        },
-        "user": None
-    }
-}
+import json
+
+app = Flask(__name__)
 
 
-id=jsonobj["item1"]
-meetings=jsonobj["item2"]["meetings"]
-all_srvcs=[]
-last_meeting_srvcs=[]
 
 
 _do_print_debug_info = False
@@ -341,18 +186,9 @@ def antysyn(word):
             synonyms.append(l.name())
             if l.antonyms():
                 antonyms.append(l.antonyms()[0].name())
-    #print("Synonym:",set(synonyms))
-    #print("Antonym:",set(antonyms))
-    
-#Taking the sentences as input
 
 nlp = en_core_web_sm.load()
-sent1="The user can't login with username and password."
-sent2="The user account can be verified."
 
-#print_parse_info(nlp,sent1)
-#print("\n")
-#print_parse_info(nlp,sent2)
 checklist_more=['more than ', 'greater than ', 'above']
 checklist_less=['less than ', 'lesser than ', 'below']
 def checknegationcontradiction(antonym_tracker,negdoc1,negdoc2):
@@ -432,8 +268,8 @@ def check_values(t1,t2):
             return('Contradiction')
             
 def proc_sentences(s1,s2):
-    doc1 = nlp(sent1)
-    doc2 = nlp(sent2)
+    doc1 = nlp(s1)
+    doc2 = nlp(s2)
 
     #Initializing required variables and lists.
     wrdlist=list()
@@ -484,60 +320,119 @@ def proc_sentences(s1,s2):
 
     if contr_tracker==1:
         print("\n","->",verb1.upper(),"and",verb2.upper(),"can't happen simultaneously.")
-        print("->Antonymity/Negation contradiction FOUND.")
+        #print("->Antonymity/Negation contradiction FOUND.")
         return True
     else:
-        print("\n->Antonymity/Negation contradiction NOT found.")
+        #print("\n->Antonymity/Negation contradiction NOT found.")
         return False
-    #if num_contr_tracker==1:
-    #   print("->Numeric Mismatch Contradiction FOUND.")
-    #else:
-    #    print("->Numeric Mismatch Contradiction NOT Found.")
 
 
-for i in range(len(meetings)):
-    if meetings['$values'][i]['meetingID'] == id:
-        last_meeting_srvcs=meetings['$values'][i]['services']['$values']
-    else:
-        all_srvcs.append(meetings['$values'][i]['services']['$values'])
-#print(all_srvcs)
-conflicts_srvs=[]
+def detect_conflicts(meetingID,Details,Services,MeetingIDs,ServiceIDs):
 
-conflictDetected=False
+    #print("All Meetings IDs: ",MeetingIDs)
+    #print("Selected Meeting ID: ",meetingID)
+    #print("All Service IDs: ",ServiceIDs)
+    #print("All Services: ",Services)
+    #print("All Service Details: ",Details)
 
-for i in range(len(last_meeting_srvcs)):
-    lst=last_meeting_srvcs[i]['serviceTitle']
-    #print(lst)
-    for j in range(len(all_srvcs)):
-        ast=all_srvcs[0][j]['serviceTitle']
-        #print(ast)
-        #ast_sd=all_srvcs['$values'][j]['serviceDetails']['$values']
-        #print(last_meeting_srvcs)
-        if lst == ast:
-            lst_sd=last_meeting_srvcs[i]['serviceDetails']['$values']
-            ast_sd=all_srvcs[0][j]['serviceDetails']['$values']
-            conflictDetected=False
-            for x in range(len(lst_sd)):
-                if conflictDetected:
-                    break
-                for y in range(len(ast_sd)):
-                    sen1=lst_sd[x]['serviceDetailString']
-                    sen2=ast_sd[y]['serviceDetailString']
-                    #print(sen1,'\n',sen2)
-                    if proc_sentences(sen1,sen2):
-                        print(sent1,'\n',sent2)
-                        last_meeting_srvcs[i]['conflictServiceID']=all_srvcs[0][j]['serviceID']
-                        all_srvcs[0][j]['conflictServiceID']=last_meeting_srvcs[i]['serviceID']
-                        srvc1MeetingID = last_meeting_srvcs[i]['meeting']['$ref']
-                        srvc2MeetingID = all_srvcs[0][j]['meeting']['$ref']
-                        print(srvc1MeetingID)
-                        print(srvc2MeetingID)
+    
+    #print(Services[0][0])
+    selectedMeetingIndex = -1
+    for i in range(len(MeetingIDs)):
+        if MeetingIDs[i] == meetingID:
+            selectedMeetingIndex = i
+            break
+    
+    #print("Selected Meeting Index: ",selectedMeetingIndex)
+    
+    selectedMeetingServices = Services[selectedMeetingIndex]
 
-                        print("conflict")
-                        conflicts_srvs.append(Pair(all_srvcs[0][j]['serviceID'],last_meeting_srvcs[j]['serviceID']))
-                        conflictDetected=True
-                        #print(last_meeting_srvcs[i])
+    #print("Selected Meeting Services: ",selectedMeetingServices)
+
+    selectedMeetingServiceIndex = -1
+    otherServiceMeetingIndex = -1
+    otherServiceIndex = -1
+
+    # first: Service Index of Selected Meeting, second: Meeting Index of The Other Service
+    # third: Other Service Index  
+    servicesWithSameTitle = []
+
+    for i in range(len(selectedMeetingServices)):
+        sameServiceTitle = False
+        for j in range(len(Services)):
+                if j == selectedMeetingIndex:
+                    continue
+                else:
+                    if sameServiceTitle == False:
+                        for k in range(len(Services[j])):
+                            #print("Service In Selected Meeting: ",selectedMeetingServices[i])
+                            #print("Service In Other Meetings: ",Services[j][k])
+
+                            if selectedMeetingServices[i]==Services[j][k]:
+                                #print("Same Service Title: ",selectedMeetingServices[i],Services[j][k]
+                                servicesWithSameTitle.append((i,j,k))
+                                sameServiceTitle = True
+                                break
+                            
+                    else:
                         break
+
+
+
+    
+    conflictFound = False
+    
+    # first: Service ID of Selected Meeting
+    # second: Meeting ID of The Other Service
+    # third: Other Service ID  
+    finalList=[]
+    
+    for k in range(len(servicesWithSameTitle)): 
+        conflictFound = False
+        selectedMeetingServiceIndex = servicesWithSameTitle[k][0]
+        otherServiceMeetingIndex = servicesWithSameTitle[k][1]
+        otherServiceIndex = servicesWithSameTitle[k][2]
+        print(selectedMeetingServices[selectedMeetingServiceIndex])
+        print(Services[otherServiceMeetingIndex][otherServiceIndex])
+        for i in range(len(Details[selectedMeetingIndex][selectedMeetingServiceIndex])):
+            if conflictFound == False:
+                sent1=Details[selectedMeetingIndex][selectedMeetingServiceIndex][i]
+                for j in range(len(Details[otherServiceMeetingIndex][otherServiceIndex])):
+                    sent2=Details[otherServiceMeetingIndex][otherServiceIndex][j]
+                    if proc_sentences(sent1,sent2):
+                        print(sent1)
+                        print(sent2)
+                        conflictFound = True
+                        serviceIDofSelectedMeeting = ServiceIDs[selectedMeetingIndex][selectedMeetingServiceIndex]
+                        meetingIDwithConflict = MeetingIDs[otherServiceMeetingIndex]
+                        serviceIDwithConflict = ServiceIDs[otherServiceMeetingIndex][otherServiceIndex]
+                        finalList.append((serviceIDofSelectedMeeting,meetingIDwithConflict,serviceIDwithConflict))
+                        break
+            else:
+                break
+                    
+    
+    print(finalList)
+
+    return finalList
+
+@app.route("/")
+def hello_world():
+    return "Hello World"
+
+@app.route("/detectConflicts", methods=['GET'])
+def detect_conflict():
+    meetingID = request.json['meetingID']
+    Details = request.json['details']
+    Services = request.json['services']
+    MeetingIDs = request.json['meetingIDs']
+    ServiceIDs = request.json['serviceIDs']
+
+    return json.dumps(detect_conflicts(meetingID,Details,Services,MeetingIDs,ServiceIDs))
+
+    
+
+
 
 
 
